@@ -1,0 +1,22 @@
+const express = require('express');
+const app = express();
+app.use(express.json()); // lets us read the JSON AutoReply sends
+
+app.post('/autoreply', (req, res) => {
+  const msg = req.body.senderMessage.toLowerCase();
+  const name = req.body.senderName;
+  
+  let reply = "I don't understand yet 😅";
+  
+  if (msg.includes("hi") || msg.includes("hello")) {
+    reply = `Hi ${name}! How can I help you?`;
+  } else if (msg.includes("price")) {
+    reply = "Our prices start from RM50";
+  }
+  
+  // This exact format is what AutoReply needs
+  res.json({ "data": [{ "message": reply }] });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));
